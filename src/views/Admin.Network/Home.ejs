@@ -1,0 +1,26 @@
+<%- include('../partials/head.ejs') %>
+
+<div class="container-fluid">
+<h1 class="title">
+    Admin Centre
+</h1>
+<br>
+<h1 class="text-center titleoption">
+    Choose an option.
+</h1>
+<br>
+<div class="inlinebutton">
+<button type="button" class="btn btn-outline-light btn-lg" onclick='window.location.href = "/Admin.Network/Announce"'>Announce</button>
+<spacer>
+<button type="button" class="btn btn-outline-light btn-lg">Approve Activity</button>
+<br>
+<br>
+<button type="button" class="btn btn-outline-light btn-lg disabled">More coming soon...</button>
+</div>
+</div>
+
+<style>
+.title{background:linear-gradient(270deg, #4ed178, #4ed1c9, #4e9ad1, #4e6bd1, #764ed1, #aa4ed1, #d14eb8, #d14e7f, #d14e4e);background-size:1800% 1800%;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;-webkit-animation:AnimationName 11s ease infinite;-moz-animation:AnimationName 11s ease infinite;animation:AnimationName 11s ease infinite}@-webkit-keyframes AnimationName{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}@-moz-keyframes AnimationName{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}@keyframes AnimationName{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+</style>
+
+<%- include('../partials/footer.ejs') %>

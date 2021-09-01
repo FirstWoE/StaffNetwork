@@ -1,0 +1,34 @@
+<%- include('../partials/head.ejs') %>
+
+<div class="container-fluid">
+    <br />
+        <h1 class="title">Your Settings.</h1>
+        <hr>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#"> <i class="fad fa-user-edit"></i> Personal Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/Network/Settings/Store"><i class="fad fa-store-alt"></i> Store</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fad fa-life-ring"></i> Support</a>
+          </li>
+        </ul>
+        <br>
+        <form method="POST" action="/Backend/UpdateSettings" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+              <label for="formFile" class="form-label">Avatar (recommended to be 512x512)</label>
+              <input class="form-control" type="file" id="formFile" accept=".png,.webp,.jpg,.jpeg,.gif" name="avatar">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>
+
+<!--
+Notes to self for temp:
+
+-->

@@ -1,0 +1,3 @@
+{
+    "ignore": ["Network.Scripts.js","../public/js/Network.Scripts.js"]
+  }

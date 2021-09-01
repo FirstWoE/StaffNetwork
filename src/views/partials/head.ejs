@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="title" content="FWE Staff Network">
+        <meta name="description" content="FWER's SN. You need to be an authorised staff member to access this page.">
+        <meta name="keywords" content="fwer">
+        <meta name="robots" content="noindex, nofollow">
+        <meta http-equiv="Content-Type" content="text/html">
+        <meta name="language" content="English">
+        <meta name="author" content="FloppaFan13">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" class="currentTheme">
+    <link rel="stylesheet" href="/_assets_/css/Network.Styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <div class="container-fluid">
+        <br />
+        <button type="button" class="btn btn-dark float-right settings adcheck hidden"><i class="fad fa-user-cog"></i> <span class="adchecktext"></span></button>
+        <button type="button" class="btn btn-dark float-right settings" onclick="window.location.href = '/Network/Settings'" ><i class="fad fa-user-cog"></i> Settings</button>
+        <button type="button" class="btn btn-dark float-right profile"><i class="fad fa-chart-line"></i> FWE Points <span class="badge bg-secondary">★ <%= user[0].fweP %></span></button>
+        <button type="button" class="btn btn-dark float-right profile" onclick="window.location.href = '/logout'"> <img width="25" class="avatarimg"> Logged in as <%= user[0].username %></button>
+        <button type="button" class="btn btn-dark float-right profile" onclick="window.history.back();"> <i class="fad fa-undo"></i> Go Back </button>
+    </div>

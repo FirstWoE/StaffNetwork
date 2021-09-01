@@ -1,0 +1,12 @@
+<%- include('../partials/head.ejs') %>
+<div class="container-fluid">
+<h1 class="title">
+    Admin » Announce
+</h1>
+<br>
+<form class="row g-3" method="POST" action="/Backend/AddAnnouncement">
+      <input type="text" class="form-control announceform" placeholder="Announce your message to the team..." name="announcement">
+      <input type="text" class="form-control announceform" placeholder="Add a description... :)" name="description">
+      <button type="submit" class="btn btn-primary mb-3">Submit</button>
+  </form>
+<%- include('../partials/footer.ejs') %>

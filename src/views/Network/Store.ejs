@@ -1,0 +1,60 @@
+<%- include('../partials/head.ejs') %>
+
+<div class="container-fluid">
+    <br>
+        <h1 class="title">Your Settings.</h1>
+        <hr>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" href="/Network/Settings"> <i class="fad fa-user-edit"></i> Personal Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#" aria-current="page"><i class="fad fa-store-alt"></i> Store</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fad fa-life-ring"></i> Support</a>
+          </li>
+        </ul>
+        <br>
+        <div class="card cardinline" style="width: 18rem;">
+            <img src="https://cdn.upload.systems/uploads/KAlgWWDw.png" class="card-img-top" alt="Theme Preview">
+            <div class="card-body">
+              <h5 class="card-title" name="theme-name"><b>FWE</b> GradiTheme Light</h5>
+              <p class="card-text">Give the panel a splash of colour with Gradient titles. <br> <b>This theme is light-mode.</b></p>
+              <a href="#" class="btn btn-primary" onclick="sendTheme('GradiThemeLight','100')">Buy | 100★</a>
+            </div>
+            <!-- hey head into the js in public/js/ -->
+          </div>
+          <div class="card cardinline" style="width: 18rem;">
+            <img src="https://cdn.upload.systems/uploads/VZJLTtuc.png" class="card-img-top" alt="Theme Preview">
+            <div class="card-body">
+              <h5 class="card-title"><b>FWE</b> GradiTheme Dark</h5>
+              <p class="card-text">Give the panel a splash of colour with Gradient titles. <br> <b>This theme is dark-mode.</b></p>
+              <a href="#" class="btn btn-primary" onclick="sendTheme('GradiThemeDark','250')">Buy | 250★</a>
+            </div>
+          </div>
+          <br>
+          <hr>
+          <br>
+          <h1 class="title"> Special Items </h1>
+          <br>
+          <div class="card cardinline" style="width: 18rem;">
+            <img src="https://cdn.upload.systems/uploads/EsLKPxpt.gif" class="card-img-top" alt="Theme Preview" height="65px;">
+            <div class="card-body">
+              <h5 class="card-title">Avatar <b>PowerUp!</b></h5>
+              <p class="card-text">Power up your avatars with this profile upgrade<br> <b>This <b>PowerUp</b> allows you to use GIF files as your avatar.</p>
+              <a href="#" class="btn btn-primary" onclick="sendUpgrade('AvatarUpgrade','250')">Buy | 250★</a>
+            </div>
+          </div>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %>
+
+<!-- theme test below -->
+<link rel="stylesheet" href="/_assets_/css/GradiThemeDark.css">
+
+<!--
+Notes to self for temp:
+
+-->
