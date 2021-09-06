@@ -88,3 +88,6 @@ spacer {
     transform: translate(-50%, -50%);
     width: 550px !important;
 }
+.marginright5 {
+    margin-right: 9px;
+}

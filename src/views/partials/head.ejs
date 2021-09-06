@@ -19,7 +19,8 @@
         <br />
         <button type="button" class="btn btn-dark float-right settings adcheck hidden"><i class="fad fa-user-cog"></i> <span class="adchecktext"></span></button>
         <button type="button" class="btn btn-dark float-right settings" onclick="window.location.href = '/Network/Settings'" ><i class="fad fa-user-cog"></i> Settings</button>
+        <button type="button" class="btn btn-dark float-right settings marginright5" onclick="window.location.href = '/Network/Payout'" ><i class="far fa-bags-shopping"></i> Payment</button>
         <button type="button" class="btn btn-dark float-right profile"><i class="fad fa-chart-line"></i> FWE Points <span class="badge bg-secondary">★ <%= user[0].fweP %></span></button>
         <button type="button" class="btn btn-dark float-right profile" onclick="window.location.href = '/logout'"> <img width="25" class="avatarimg"> Logged in as <%= user[0].username %></button>
-        <button type="button" class="btn btn-dark float-right profile" onclick="window.history.back();"> <i class="fad fa-undo"></i> Go Back </button>
+        <button type="button" class="btn btn-dark float-right profile goback" onclick="window.history.back();"> <i class="fad fa-undo"></i> Go Back </button>
     </div>

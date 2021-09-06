@@ -1,0 +1,37 @@
+<%- include('../partials/head.ejs') %>
+<div class="container-fluid">
+    <div class="modal" id="myModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Hmm, looks like we don't know you!</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" action="/Backend/SetPayoutUser">
+                    <p>Please enter your user ID below.</p>
+                    <form action="/Backend/SetPayoutUser" type="POST">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping">https://www.roblox.com/users/</span>
+                        <input type="number" class="form-control robloID" placeholder="userID" aria-label="Numeric ID" aria-describedby="addon-wrapping" name="ID" id="ID">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" action="submit">Save changes</button>
+                      </div>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+</div>
+<%- include('../partials/footer.ejs') %>
+<script>
+    var userID = '<%- user[0].robloxID -%>'
+    var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+      keyboard: false,
+      backdrop: 'static'
+    })
+    if (userID == 'notSet') {
+        myModal.show()
+    }
+</script>

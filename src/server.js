@@ -97,13 +97,16 @@ function checkAuth(requiresRender = true, render = "notReq", hiddenPage = false,
                         if (!error) {
                             console.log('user information updated')
                         }
+                        if(requiresRender && announcementPage == false){
+                            return res.render(path.join(__dirname, render), { user: user });
+                        } else
                         if(requiresRender && announcementPage == true){
                             return res.render(path.join(__dirname, render), { user: user, announcement: announcement });
-                        }
+                        } else 
                         if(requiresRender && payout){
-                            var groupFundsTakeOut = this.groupFunds
-                            return res.render(path.join(__dirname, render), { user: user, announcement: announcement });
-                        }
+                            var groupFundsTakeOut = (this.groupFunds / 4)
+                            return res.render(path.join(__dirname, render), { user: user, takeableGF: groupFundsTakeOut, groupFunds: this.groupFunds });
+                        } else
                         if(hiddenPage && user[0].adminLevel == neededRank && requiresRender){
                             console.log(user[0].adminLevel)
                             res.render(path.join(__dirname, render), { user: user })
@@ -121,7 +124,13 @@ function checkAuth(requiresRender = true, render = "notReq", hiddenPage = false,
     }
 }
 
-app.get('/', passport.authenticate('discord'))
+app.get('/', (req, res) => {
+    if(!req.user) {
+        res.redirect('/discord/auth')
+    } else {
+        res.redirect('/Network/Home')
+    }
+})
 
 app.get('/discord/auth', passport.authenticate('discord', {
     failureRedirect: '/'
@@ -137,7 +146,7 @@ app.get('/logout', function(req, res) {
 
 app.get('/Network/Home', checkAuth(true, '/../src/views/Network/Home', false, '0', true), function(req, res) {})
 app.get('/Network/Payout', checkAuth(true, '/../src/views/Network/Payout', false, '0', false, true), function(req, res) {})
-app.get('/Network/Settings', checkAuth(true, '/../src/views/Network/Settings'), function(req, res) {})
+app.get('/Network/Settings', checkAuth(true, '/../src/views/Network/Settings', false, '0', false, false), function(req, res) {})
 app.get('/Network/Store', checkAuth(true, '/../src/views/Network/Store'), function(req, res) {})
 
 app.get('/Admin.Network/Home', checkAuth(true, '/../src/views/Admin.Network/Home', true, 'admin'), function(req, res) {})
@@ -152,7 +161,7 @@ app.post('/Backend/UpdateSettings', checkAuth(false) && upload.single('avatar'),
             console.log(user[0].userLevel)
             if(user[0].userLevel == 0){
                 Hook.err("Panel",`Error when dealing with ${req.user[0].username}'s request. They were not high enough level to successfully change their avatar!`)
-            } else {
+            // } else {
                 let doc = User.updateOne({ discordId: req.user[0].discordId }, { avatar: req.file.filename },
                     function (err, docs) {
                         if (err){
@@ -185,9 +194,9 @@ app.post('/Backend/Purchase', checkAuth(false), async function(req,res){
     var price = req.body.price
     var themeName = req.body.themename
     if(price > req.user[0].fweP){
-        res.status(412).send({ error: 'Oops, looks like your balance is insufficient! :(' })
+        res.status(404).send({ error: 'Oops, looks like your balance is insufficient! :(' })
     } else if(req.user[0].currentTheme == themeName) {
-        res.status(302).send({ error: 'You already own it!' })
+        res.status(404).send({ error: 'You already own it!' })
     } else {
         let amountTakeAway = parseInt(req.user[0].fweP) - parseInt(price)
         let stringATA = amountTakeAway.toString()
@@ -199,6 +208,7 @@ app.post('/Backend/Purchase', checkAuth(false), async function(req,res){
                 }
                 else{
                     Hook.success("Panel",`${req.user[0].username} has successfully bought a new theme!`)
+                    res.redirect('/')
                 }
             }
         )
@@ -207,7 +217,7 @@ app.post('/Backend/Purchase', checkAuth(false), async function(req,res){
 
 app.post('/Backend/UpgradeUser', checkAuth(false), async function(req,res) {
     if(req.user[0].userLevel == 1){
-        return res.status(302).send({ error: 'You already own it!' })
+        return res.status(404).send({ error: 'You already own it!' })
     } else {
         let doc = User.updateOne({ discordId: req.user[0].discordId }, { userLevel: '1' },
             function (err, docs) {
@@ -222,8 +232,24 @@ app.post('/Backend/UpgradeUser', checkAuth(false), async function(req,res) {
     }
 })
 
-app.post('/Backend/Payment', checkAuth(false), async function(req,res) {
+app.post('/Backend/SetPayoutUser', checkAuth(false), async function(req,res) {
+    let doc = User.updateOne({ discordId: req.user[0].discordId }, { robloxID: req.body.ID },
+            function (err, docs) {
+                if (err){
+                    Hook.err("Panel",`Error when dealing with ${req.user[0].username}'s request. Details are attached below: ${err}`)
+                    res.redirect('/')
+                    console.log(err)
+                }
+                else{
+                    Hook.success("Panel",`${req.user[0].username} has successfully set their new ID! ID: ${req.body.ID}`)
+                    res.redirect('/Network/Payout')
+                }
+            })
     
+})
+
+app.post('/Backend/Payout', checkAuth(false), async function(req,res) {
+    Hook.info("Payout", `New request opened by ${req.user[0].username} requesting ${req.body.robuxRequest}`)
 })
 
 app.post('/Backend/AddAnnouncement', checkAuth(false, 'notReq', true, 'admin'), async function(req,res) {

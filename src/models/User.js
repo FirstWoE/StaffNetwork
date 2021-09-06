@@ -6,7 +6,11 @@ const schema = new mongoose.Schema({
     avatar: 'string',
     userLevel: 'string',
     adminLevel: 'string',
-    currentTheme: 'string'
+    currentTheme: 'string',
+    robloxID: 'string',
+    fundsExported: 'string',
+    recentFunds: 'string',
+    fundTimeout: 'string'
 });
 
 

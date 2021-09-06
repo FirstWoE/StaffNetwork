@@ -26,3 +26,11 @@ body {
     color: white;
     border: 1px solid white;
 }
+.modal-content, .btn-close, .modal-footer {
+    color: white !important;
+    background-color: rgb(15, 15, 15) !important;
+}
+
+.btn-close {
+    display: none !important;
+}
