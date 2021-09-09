@@ -7,10 +7,7 @@ const schema = new mongoose.Schema({
     userLevel: 'string',
     adminLevel: 'string',
     currentTheme: 'string',
-    robloxID: 'string',
-    fundsExported: 'string',
-    recentFunds: 'string',
-    fundTimeout: 'string'
+    robloxID: 'string'
 });
 
 

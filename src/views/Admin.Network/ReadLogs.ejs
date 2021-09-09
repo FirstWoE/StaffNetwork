@@ -1,0 +1,31 @@
+<%- include('../partials/head.ejs') %>
+<div class="container-fluid">
+<h1 class="title">
+    Admin » Read Logs
+</h1>
+<br>
+<div class="card g-3" style="margin-top: 15px;">
+    <div class="card-header quotes">
+        <i class="far fa-conveyor-belt-alt"></i> Awaiting Logging
+    </div>
+    <div class="card-body">
+      <% for(let count = 0; count < logs.length; count++ ){ %>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Log #<%= count + 1 %>: <%= logs[count].itemName %> from <%= user[0].username %></h5>
+            <p class="card-text">Requesting <%= logs[count].points %> points.</p>
+            <img src="/_assets_/uploads/<%- logs[count].image %>" height="50px">
+            <br>
+            <form method="POST" action="/Backend/AcceptLog">
+                <input type="text" class="form-control" placeholder="Amount of FWEP to give" name="fwePG" id="fwePG">
+                <button type="submit" class="btn btn-success" name="accept">Accept</button>
+              </form>
+              <form method="POST" action="/Backend/DenyLog">
+                <button type="submit" class="btn btn-danger" name="deny">Deny</button>
+              </form>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+<%- include('../partials/footer.ejs') %>

@@ -12,7 +12,6 @@ var Announcement = require('./models/Announcement')
 var session = require('express-session')
 var passport = require('passport')
 var DiscordStrategy = require('passport-discord').Strategy
-    , refresh = require('passport-oauth2-refresh');
 
 var path = require('path')
 const multer = require('multer');
@@ -20,6 +19,7 @@ var ejs = require('ejs')
 var fs = require('fs')
 var chalk = require('chalk')
 var noblox = require('noblox.js')
+const LogWork = require('./models/LogWork')
 
 
 var scopes = ['identify'];
@@ -36,18 +36,7 @@ catch (error) {
     console.log('Error connection: ' + error);
 }
 
-app.use('/_assets_', express.static(path.join(__dirname, '/../public')));
-
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './public/uploads');
-    },
-
-    // By default, multer removes file extensions so let's add them back
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
+app.use('/_assets_', express.static(path.join(__dirname, 'public')));
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -56,9 +45,9 @@ passport.deserializeUser(function(id, done) {
     done(null, id);
 });
 var discordStrat = new DiscordStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL,
+    clientID: "875503281865117716",
+    clientSecret: "MpghrDbFDaWlZTHg2kBJYg-0HK8uUAfM",
+    callbackURL: "/discord/auth",
     scope: scopes
 },
 function(accessToken, refreshToken, profile, cb) {
@@ -81,40 +70,57 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 async function startApp(){
-    const currentUser = await noblox.setCookie(process.env.ACCOUNT_COOKIE) 
+    const currentUser = await noblox.setCookie("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_B9A53800E21936C38358DC3E4AC994B67AECE6B9271C449169ACE3D7388AA047461ABD550669D879639F09EADF155B967F7F744DA8669C061613708FDE4DEED7B8602D6BF5D403C067873F67E907DB0FF82DF75BDCD6494A67450D902DC9A3E98F5DEC3087FB35896B005F344BC7CC7D6D55E4A8FBE7DE410A3E14F454C8E429D60D22B92C806969029C6ACAD64EBDABD55893210C4915C00333C2CEEDFA485EBD4BBD0EFC06E7635F327D3479497A57A8D182621FA7EF4E0F909A8BB4CAB0DA65A9B1C3993A1BEEB67A9136460DD364010463533EC0F06CB81CC50AFD23B02D05CCB96DD5E05D1CC6B8CADC13ECF2AA1644DDA9B6C271376D1F38A8CBE39EF94C65578E40EABB0ACDC4AFEC9ED2B84BA3820A6BAAF1198362A22175B93F30A5428D687D48074ED1C55BB68105923E14572A6E47408E83E5E67C1E5423F2F79992E885E1") 
     console.log(`Logged in as ${currentUser.UserName} [${currentUser.UserID}]`)
-
-    // Do everything else, calling functions and the like.
-    this.groupFunds = await noblox.getGroupFunds(11519763)
+    console.log(`Opened on port ${process.env.PORT}`)
 }
 
-function checkAuth(requiresRender = true, render = "notReq", hiddenPage = false, neededRank = "0", announcementPage = false, payout = false){
+function checkAuth(requiresRender = true, render = "notReq", hiddenPage = false, neededRank = "0", announcementPage = false, payout = false, logPage = false){
     return function(req, res, next) {
         if(req.isAuthenticated()){
             User.find({ discordId: req.user[0].discordId }, function(err,user) {
                 Announcement.find({}, function(err,announcement){
-                    req.logIn(user, function(error) {
-                        if (!error) {
-                            console.log('user information updated')
-                        }
-                        if(requiresRender && announcementPage == false){
-                            return res.render(path.join(__dirname, render), { user: user });
-                        } else
-                        if(requiresRender && announcementPage == true){
-                            return res.render(path.join(__dirname, render), { user: user, announcement: announcement });
-                        } else 
-                        if(requiresRender && payout){
-                            var groupFundsTakeOut = (this.groupFunds / 4)
-                            return res.render(path.join(__dirname, render), { user: user, takeableGF: groupFundsTakeOut, groupFunds: this.groupFunds });
-                        } else
-                        if(hiddenPage && user[0].adminLevel == neededRank && requiresRender){
-                            console.log(user[0].adminLevel)
-                            res.render(path.join(__dirname, render), { user: user })
-                        } else if(hiddenPage && user[0].adminLevel !== neededRank && requiresRender == false){
-                            console.log(user[0].adminLevel)
-                            return res.redirect('/Network/Home')
-                        }
-                    });
+                    LogWork.find({}, function(err, logs){
+                        req.logIn(user, async function(error) {
+                            if (!error) {
+                                console.log('user information updated')
+                            }
+                            if(requiresRender && announcementPage == false && payout == false && hiddenPage == false){
+                                console.log("[FWE Logs] RENDERING1")
+                                return res.render(path.join(__dirname, render), { user: user });
+                            } else
+                            if(requiresRender && announcementPage == true){
+                                console.log("[FWE Logs] RENDERING2")
+                                return res.render(path.join(__dirname, render), { user: user, announcement: announcement });
+                            } else 
+                            if(requiresRender && payout){
+                                console.log("[FWE Logs] RENDERING3")
+                                var groupFunds = await noblox.getGroupFunds("11519763")
+                                var getRev = await noblox.getGroupRevenueSummary("11519763", "Year")
+                                var robloxUser = await noblox.getUsernameFromId(req.user[0].robloxID)
+                                var pendingRobux = getRev.pendingRobux
+                                var groupFundsTakeOut = (groupFunds / 4)
+    
+                                console.log(robloxUser)
+    
+                                return res.render(path.join(__dirname, render), { user: user, takeableGF: groupFundsTakeOut, groupFunds: groupFunds, pendingRobux: pendingRobux, robloxUser: robloxUser })
+                            } else
+                            if(hiddenPage && user[0].adminLevel == neededRank && requiresRender && logPage == false){
+                                console.log("[FWE Logs] RENDERING4")
+                                console.log(user[0].adminLevel)
+                                res.render(path.join(__dirname, render), { user: user })
+                            } else 
+                            if(hiddenPage && user[0].adminLevel !== neededRank && requiresRender == false){
+                                console.log("[FWE Logs] RENDERING5")
+                                console.log(user[0].adminLevel)
+                                return res.redirect('/Network/Home')
+                            } else
+                            if(hiddenPage && user[0].adminLevel == neededRank && requiresRender && logPage == true){
+                                console.log(logs)
+                                return res.render(path.join(__dirname, render), { user: user, logs: logs })
+                            }
+                        });
+                    })
                 })
             })
             return next();
@@ -149,11 +155,21 @@ app.get('/Network/Payout', checkAuth(true, '/../src/views/Network/Payout', false
 app.get('/Network/Settings', checkAuth(true, '/../src/views/Network/Settings', false, '0', false, false), function(req, res) {})
 app.get('/Network/Store', checkAuth(true, '/../src/views/Network/Store'), function(req, res) {})
 
-app.get('/Admin.Network/Home', checkAuth(true, '/../src/views/Admin.Network/Home', true, 'admin'), function(req, res) {})
-app.get('/Admin.Network/Announce', checkAuth(true, '/../src/views/Admin.Network/Announce', true, 'admin'), function(req, res) {})
+app.get('/Admin.Network/Home', checkAuth(true, '/../src/views/Admin.Network/Home', true, 'admin', false), function(req, res) {})
+app.get('/Admin.Network/Announce', checkAuth(true, '/../src/views/Admin.Network/Announce', true, 'admin', false), function(req, res) {})
+app.get('/Admin.Network/ReadLogs', checkAuth(true, '/../src/views/Admin.Network/ReadLogs', true, 'admin', false, false, true), function(req, res) {})
 
 
-let upload = multer({ storage: storage })
+let upload = multer({ storage: multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './public/uploads');
+    },
+
+    // By default, multer removes file extensions so let's add them back
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+}) })
 app.post('/Backend/UpdateSettings', checkAuth(false) && upload.single('avatar'), function(req, res){
     var fileExt = req.file.filename.split(".")
     if(fileExt[1] == "gif"){
@@ -232,6 +248,39 @@ app.post('/Backend/UpgradeUser', checkAuth(false), async function(req,res) {
     }
 })
 
+app.post('/Backend/UploadNewLog', checkAuth(false) && upload.single('IOI'), async function(req,res) {
+    let doc = new LogWork({ fromUser: req.user[0].robloxID, itemName: req.body.itemName, points: req.body.points, image: req.file.filename })
+    doc.save(function (err) {
+        if (err) return Hook.err("Panel",`Uh oh! An error: ${err}`)
+        Hook.success("Panel",`New log request!`)
+        res.redirect('/');
+    });
+})
+
+app.post('/Backend/AcceptLog', checkAuth(false, 'notReq', true, 'admin'), async function(req,res) {
+    var pointsToGive = parseInt(req.user[0].fweP) + parseInt(req.body.fwePG)
+    let doc = User.updateOne({ discordId: req.user[0].discordId }, { fweP: pointsToGive },
+            function (err, docs) {
+                if (err){
+                    Hook.err("Panel",`Error when dealing with ${req.user[0].username}'s request. Details are attached below: ${err}`)
+                    console.log(err)
+                }
+                else{
+                    LogWork.deleteOne({ fromUser: req.user[0].robloxID }, function (err) {
+                        Hook.success("Panel",`${req.user[0].username} request has been accepted!`)
+                        res.redirect('/')
+                    });
+                }
+            })
+})
+
+app.post('/Backend/DenyLog', checkAuth(false, 'notReq', true, 'admin'), async function(req,res) {
+    LogWork.deleteOne({ fromUser: req.user[0].robloxID }, function (err) {
+        Hook.err("Panel",`${req.user[0].username} request has been denied!`)
+        res.redirect('/')
+    });
+})
+
 app.post('/Backend/SetPayoutUser', checkAuth(false), async function(req,res) {
     let doc = User.updateOne({ discordId: req.user[0].discordId }, { robloxID: req.body.ID },
             function (err, docs) {
@@ -249,7 +298,28 @@ app.post('/Backend/SetPayoutUser', checkAuth(false), async function(req,res) {
 })
 
 app.post('/Backend/Payout', checkAuth(false), async function(req,res) {
-    Hook.info("Payout", `New request opened by ${req.user[0].username} requesting ${req.body.robuxRequest}`)
+    var robuxRequesting = parseInt(req.body.robuxRequest) / 25
+    Hook.info("Payout", `New request opened by ${req.user[0].username} requesting ${robuxRequesting} robux. Processing request.`)
+
+    var newFWEPoint = parseInt(req.user[0].fweP - robuxRequesting)
+    if(newFWEPoint <= 0)
+    {
+        return res.redirect('/')
+    }
+    let doc = User.updateOne({ discordId: req.user[0].discordId }, { fweP: newFWEPoint },
+        function (err, docs) {
+            if (err){
+                Hook.err("Payout",`Error when dealing with ${req.user[0].username}'s request. Details are attached below: ${err}`)
+                res.redirect('/')
+                console.log(err)
+            }
+            else{
+                // Make payout
+                noblox.groupPayout("11519763", req.user[0].robloxID, robuxRequesting)
+                Hook.success("Payout", `Request opened by ${req.user[0].username} has been successfully finished!`)
+                res.redirect(req.get('referer'))
+            }
+        })
 })
 
 app.post('/Backend/AddAnnouncement', checkAuth(false, 'notReq', true, 'admin'), async function(req,res) {

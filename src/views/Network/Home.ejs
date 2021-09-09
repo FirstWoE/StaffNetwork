@@ -3,6 +3,22 @@
 <div class="container-fluid">
     <h3 class="title"><b><i class="fas fa-home glow"></i> Welcome home, <%= user[0].username %>!</b></h3>
     <br>
+    <!-- MODAL -->
+    <div class="modal" id="myModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Hello!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Our panel is currently under construction, and will have a few bugs. If you have any issues contact Fab, Floppa or Ash.</p>
+            <small>Click the background to close me!</small>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- END OF MODAL -->
     <div class="card">
         <div class="card-header quotes">
             <i class="fad fa-quote-left"></i> Quotes
@@ -14,7 +30,7 @@
           </blockquote>
         </div>
       </div>
-      <div class="card" style="max-width: 45rem; margin-top: 15px;">
+      <div class="card" style="margin-top: 15px;">
         <div class="card-header quotes">
             <i class="fad fa-quote-left"></i> Announcements
         </div>
@@ -29,14 +45,40 @@
           <% } %>
         </div>
       </div>
+      <div class="card" style="margin-top: 15px;">
+        <div class="card-header quotes">
+            <i class="fal fa-business-time"></i> Log Work
+        </div>
+        <div class="card-body">
+          <form method="POST" action="/Backend/UploadNewLog" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="WHYC">What have you created?</label>
+              <input type="text" class="form-control" id="WHYC" placeholder="Can't wait to see what you've done!" name="itemName">
+            </div>
+            <br>
+            <div class="form-group">
+              <label for="fwePR">How many FWE Points?</label>
+              <input type="text" class="form-control" id="fwePR" placeholder="Please try to not enter a number not a multiple of 25." name="points">
+            </div>
+            <br>
+            <div class="form-group mb-3">
+              <label for="formFile" class="form-label">Image of Item (.png, or .jp(e)g files only)</label>
+              <input class="form-control" type="file" id="IOI" accept=".png,.jpg,.jpeg" name="IOI">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
 </div>
 
 <%- include('../partials/footer.ejs') %>
 
-<!--
-Notes to self for temp:
-
--->
+<script>
+  var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+      keyboard: false
+    })
+    window.onload = myModal.show()
+</script>
 
 <style>
 .goback {

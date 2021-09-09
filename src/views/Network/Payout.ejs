@@ -1,5 +1,6 @@
 <%- include('../partials/head.ejs') %>
 <div class="container-fluid">
+  <!-- MODAL -->
     <div class="modal" id="myModal" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -18,13 +19,63 @@
                       <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" action="submit">Save changes</button>
                       </div>
+              </form>
             </div>
-          </form>
           </div>
         </div>
+    </div>
+    <!-- END OF MODAL -->
+    <h1 class="title">Payment.</h1>
+    <br />
+    <div class="card">
+      <div class="card-header quotes">
+          <i class="fal fa-chart-line"></i> Statistics
       </div>
+      <div class="card-body">
+        <p><b>Current Takeable:</b> <%= takeableGF %></p>
+        <p><b>Current Group Funds:</b> <%= groupFunds %></p>
+        <p><b>Being Added Soon:</b> <%= pendingRobux %></p>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="card-header quotes">
+          <i class="fal fa-percentage"></i> Current Payout
+      </div>
+      <div class="card-body">
+        <p>★25 = 1 Robux (rough).</p>
+        <small>Be aware! If you enter a number between multiples of 25, you will be charged for the lower amount! For example: if you enter 55 FWE Points, you will only receive 2 robux.</small>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="card-header quotes">
+          <i class="fad fa-coin"></i> Payout
+      </div>
+      <div class="card-body">
+        <p>All payouts will be made to your previously linked account, <%= robloxUser %>. If this is not you, DM Ash or Floppa immediately.</p>
+        <small>If you enter too many FWE Points, you will be charged of the maximum possible.</small>
+        <form action="/Backend/Payout" method="POST">
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Current FWE Points:</label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<%- user[0].fweP %>" style="color:white;">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputHowMany" class="col-sm-2 col-form-label">Amount to Convert (minimum: 25):</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="fwePayment" placeholder="" min="25" name="robuxRequest">
+              <small id="smallFWE" class="form-text text-muted">With the current conversion rate, you will receive: 0</small>
+              <br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 </div>
-<%- include('../partials/footer.ejs') %>
+<%- include('../partials/footer.ejs') %> 
 <script>
     var userID = '<%- user[0].robloxID -%>'
     var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
@@ -34,4 +85,14 @@
     if (userID == 'notSet') {
         myModal.show()
     }
+
+
+    var smallID = document.getElementById('fwePayment');
+    var smallFWE = document.getElementById('smallFWE');
+    smallID.addEventListener('input', function (evt) {
+      var mathm = parseInt(this.value) / 25
+      smallFWE.innerHTML = "With the current conversion rate, you will receive: " + Math.floor(mathm) + " Robux"
+    });
+
+    smallID.max = parseInt('<%- takeableGF %>') * 25 
 </script>
