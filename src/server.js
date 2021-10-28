@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 
 const webhook = require("webhook-discord")
-const Hook = new webhook.Webhook("https://canary.discord.com/api/webhooks/879836780461969428/NDPyLsCqgjfWNTU-Uxz-ysyZCwpfq6-IDror9riVN2FQH7Uhm0gbvPdz0grY4wRMwoiY")
+const Hook = new webhook.Webhook("url")
 
 var mongoose = require('mongoose')
 var User = require('./models/User')
@@ -29,7 +29,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
 try {
-    var db = mongoose.connect('mongodb+srv://admin:Yux$8b76@livenetwork1.kdjqu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, dbName: 'staffNetwork'});
+    var db = mongoose.connect('dbConnection', {useNewUrlParser: true, dbName: 'staffNetwork'});
     console.log('success connection');
 }
 catch (error) {
@@ -45,8 +45,8 @@ passport.deserializeUser(function(id, done) {
     done(null, id);
 });
 var discordStrat = new DiscordStrategy({
-    clientID: "875503281865117716",
-    clientSecret: "MpghrDbFDaWlZTHg2kBJYg-0HK8uUAfM",
+    clientID: "CID",
+    clientSecret: "CS",
     callbackURL: "/discord/auth",
     scope: scopes
 },
@@ -70,7 +70,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 async function startApp(){
-    const currentUser = await noblox.setCookie("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_B9A53800E21936C38358DC3E4AC994B67AECE6B9271C449169ACE3D7388AA047461ABD550669D879639F09EADF155B967F7F744DA8669C061613708FDE4DEED7B8602D6BF5D403C067873F67E907DB0FF82DF75BDCD6494A67450D902DC9A3E98F5DEC3087FB35896B005F344BC7CC7D6D55E4A8FBE7DE410A3E14F454C8E429D60D22B92C806969029C6ACAD64EBDABD55893210C4915C00333C2CEEDFA485EBD4BBD0EFC06E7635F327D3479497A57A8D182621FA7EF4E0F909A8BB4CAB0DA65A9B1C3993A1BEEB67A9136460DD364010463533EC0F06CB81CC50AFD23B02D05CCB96DD5E05D1CC6B8CADC13ECF2AA1644DDA9B6C271376D1F38A8CBE39EF94C65578E40EABB0ACDC4AFEC9ED2B84BA3820A6BAAF1198362A22175B93F30A5428D687D48074ED1C55BB68105923E14572A6E47408E83E5E67C1E5423F2F79992E885E1") 
+    const currentUser = await noblox.setCookie("ID") 
     console.log(`Logged in as ${currentUser.UserName} [${currentUser.UserID}]`)
     console.log(`Opened on port ${process.env.PORT}`)
 }
